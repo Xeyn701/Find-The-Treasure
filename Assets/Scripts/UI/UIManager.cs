@@ -1,92 +1,107 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Game Over")]
-    [SerializeField] private GameObject gameOverScreen;
-    [SerializeField] private AudioClip gameOverSound;
+    [SerializeField]
+    private GameObject gameOverScreen;
 
-    [Header("Pause")]
-    [SerializeField] private GameObject pauseScreen;
+    [SerializeField]
+    private GameObject PauseScreen;
 
-    private bool isPaused = false;
+    [SerializeField]
+    private GameObject PlayScreen;
+
+    [SerializeField]
+    private Slider sfxSlider;
+
+    [SerializeField]
+    private Slider bgmSlider;
 
     private void Awake()
     {
         gameOverScreen.SetActive(false);
-        pauseScreen.SetActive(false);
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (sfxSlider != null)
         {
-            // If pause screen already active, unpause and vice versa
-            PauseGame(!pauseScreen.activeInHierarchy);
+            sfxSlider.onValueChanged.AddListener(OnSfxChanged);
+            if (PlayerPrefs.HasKey("sfxVol"))
+            {
+                sfxSlider.value = PlayerPrefs.GetFloat("sfxVol");
+            }
+        }
+
+        if (bgmSlider != null)
+        {
+            bgmSlider.onValueChanged.AddListener(OnBgmChanged);
+            if (PlayerPrefs.HasKey("bgmVol"))
+            {
+                bgmSlider.value = PlayerPrefs.GetFloat("bgmVol");
+            }
+        }
+    }
+    public void PauseGame()
+    {
+
+        PlayButtonSound();
+        Time.timeScale = 0;
+        PlayScreen.SetActive(false);
+        PauseScreen.SetActive(true);
+
+        if (PlayerPrefs.HasKey("bgmVol"))
+        {
+            bgmSlider.value = PlayerPrefs.GetFloat("bgmVol");
+        }
+
+        if (PlayerPrefs.HasKey("sfxVol"))
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("sfxVol");
         }
     }
 
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        PlayScreen.SetActive(true);
+        PauseScreen.SetActive(false);
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1;
+        PlayButtonSound();
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    private void OnSfxChanged(float value)
+    {
+        PlayButtonSound();
+        AudioPlayer.instance.ChangeSfxVolume(value);
+    }
+    private void OnBgmChanged(float value)
+    {
+        PlayButtonSound();
+        AudioPlayer.instance.ChangeBgmVolume(value);
+    }
+
+
+    public void PlayButtonSound()
+    {
+        AudioPlayer.instance.PlaySFX(3);
+    }
     #region Game Over
-    // Activate game over screen
     public void GameOver()
     {
         gameOverScreen.SetActive(true);
-        SoundManager.instance.PlaySound(gameOverSound);
     }
 
-    // Restart level
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    // Main Menu
-    public void MainMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-    // Quit game/exit play mode if in Editor
-    public void Quit()
-    {
-        Application.Quit(); // Quits the game (only works in build)
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Exits play mode (will only be executed in the editor)
-#endif
-    }
-    #endregion
-
-    #region Pause
-    public void PauseGame(bool status)
-    {
-        isPaused = status;
-
-        // If status == true, pause; if status == false, unpause
-        pauseScreen.SetActive(status);
-
-        // When pause status is true, change timescale to 0 (time stops)
-        // when it's false, change it back to 1 (time goes by normally)
-        if (status)
-            Time.timeScale = 0;
-        else
-            Time.timeScale = 1;
-    }
-
-    public void Continue()
-    {
-        PauseGame(false);
-    }
-
-    public void SoundVolume()
-    {
-        SoundManager.instance.ChangeSoundVolume(0.2f);
-    }
-
-    public void MusicVolume()
-    {
-        SoundManager.instance.ChangeMusicVolume(0.2f);
     }
     #endregion
 }

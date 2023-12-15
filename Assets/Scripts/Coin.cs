@@ -8,7 +8,7 @@ public class Coin : MonoBehaviour
     private void Update()
     {
         if (!isTaken)
-            transform.Rotate(0, 90 * Time.deltaTime, 0); // Animasi rotasi sederhana, ubah nilai rotasi sesuai kebutuhan
+            transform.Rotate(0, 90 * Time.deltaTime, 0); 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -17,11 +17,8 @@ public class Coin : MonoBehaviour
         {
             Debug.Log("Coin Diambil");
 
-            // Animasi menghilang
             gameObject.SetActive(false);
             isTaken = true;
-
-            // Tambahkan logika lain yang diperlukan seperti penambahan skor atau logika permainan lainnya
         }
     }
 }

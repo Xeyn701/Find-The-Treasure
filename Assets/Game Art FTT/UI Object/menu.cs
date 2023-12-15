@@ -9,8 +9,41 @@ public class menu : MonoBehaviour
     public GameObject menupanel, infopanel, messagepanel, questionpanel, settingpanel,
         soundpanel, lightpanel, supportpanel, petapanel, pausepanel;
 
+    [SerializeField]
+    private Slider sfxSlider;
+
+    [SerializeField]
+    private Slider bgmSlider;
+
+    private void Awake()
+    {
+        sfxSlider.onValueChanged.AddListener(this.OnSfxChanged);
+        bgmSlider.onValueChanged.AddListener(this.OnBgmChanged);
+    }
+
+
 
     // Start is called before the first frame update
+    void Start()
+    {
+        AudioPlayer.instance.PlayBGM(0);
+    }
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+    private void OnSfxChanged(float value)
+    {
+        StartButton();
+        AudioPlayer.instance.ChangeSfxVolume(value);
+    }
+    private void OnBgmChanged(float value)
+    {
+        StartButton();
+        AudioPlayer.instance.ChangeBgmVolume(value);
+    }
+
     void StartButton()
     {
         menupanel.SetActive(true);
@@ -19,15 +52,11 @@ public class menu : MonoBehaviour
         questionpanel.SetActive(false);
         settingpanel.SetActive(false);
         pausepanel.SetActive(false);
-    }
+    } 
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void StartButton(string scenename)
     {
+        PlayerPrefs.SetInt("playerHealth", 3);
         SceneManager.LoadScene(scenename);
     }
     public void infoButton()
@@ -74,6 +103,9 @@ public class menu : MonoBehaviour
     }
     public void soundButton()
     {
+        StartButton();
+        menupanel.SetActive(true);
+        settingpanel.SetActive(false);
         menupanel.SetActive(false);
         infopanel.SetActive(false);
         messagepanel.SetActive(false);
@@ -127,7 +159,11 @@ public class menu : MonoBehaviour
     }
     public void quitbutton()
     {
-        Application.Quit();
+        Application.Quit(); // Quits the game (only works in build)
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Exits play mode (will only be executed in the editor)
+#endif
         Debug.Log("udah ketekan kok");
     }
 }
