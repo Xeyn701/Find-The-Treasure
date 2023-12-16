@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     private GameObject PlayScreen;
 
     [SerializeField]
+    private GameObject QuestionScreen;
+
+    [SerializeField]
     private Slider sfxSlider;
 
     [SerializeField]
@@ -49,6 +52,7 @@ public class UIManager : MonoBehaviour
 
         PlayButtonSound();
         Time.timeScale = 0;
+        QuestionScreen.SetActive(false);
         PlayScreen.SetActive(false);
         PauseScreen.SetActive(true);
 
@@ -68,6 +72,15 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         PlayScreen.SetActive(true);
         PauseScreen.SetActive(false);
+        QuestionScreen.SetActive(false);
+    }
+
+    public void QuestionButton()
+    {
+        Time.timeScale = 0;
+        PlayScreen.SetActive(false);
+        PauseScreen.SetActive(false);
+        QuestionScreen.SetActive(true);
     }
 
     public void GoToMainMenu()

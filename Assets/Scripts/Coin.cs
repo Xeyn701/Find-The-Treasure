@@ -2,23 +2,27 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [SerializeField] private int coinID;
-    private bool isTaken = false;
-
-    private void Update()
-    {
-        if (!isTaken)
-            transform.Rotate(0, 90 * Time.deltaTime, 0); 
-    }
+    [SerializeField] private int coinValue = 1; // Nilai koin yang akan ditambahkan
+    private bool isTaken = false; // Menandai apakah koin telah diambil atau belum
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !isTaken)
+        if (!isTaken && collision.CompareTag("Player"))
         {
             Debug.Log("Coin Diambil");
 
-            gameObject.SetActive(false);
-            isTaken = true;
+            // Memanggil GameManager untuk menambah jumlah koin
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.AddCoin(coinValue);
+            }
+
+            // Contoh: memanggil AudioPlayer untuk efek suara saat mengambil koin
+            AudioPlayer.instance.PlaySFX(1);
+
+            isTaken = true; // Menandai bahwa koin telah diambil
+
+            Destroy(gameObject);
         }
     }
 }

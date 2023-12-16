@@ -17,9 +17,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Layers")]
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("Sounds")]
-    [SerializeField] private AudioClip jumpSound;
-
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxCollider;
@@ -67,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (coyoteCounter <= 0 && jumpCounter <= 0) return;
 
-        SoundManager.instance.PlaySound(jumpSound);
+        AudioPlayer.instance.PlaySFX(2);
 
         if (isGrounded())
             body.velocity = new Vector2(body.velocity.x, jumpPower);

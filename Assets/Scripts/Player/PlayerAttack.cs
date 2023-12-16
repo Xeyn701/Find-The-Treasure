@@ -6,8 +6,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float meleeRange;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private int damageAmount;
-    [SerializeField] private AudioClip meleeAttackSound;
-
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -32,7 +30,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void MeleeAttack()
     {
-        SoundManager.instance.PlaySound(meleeAttackSound);
+        AudioPlayer.instance.PlaySFX(0);
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, meleeRange, enemyLayer);
         foreach (Collider2D enemy in hitEnemies)
         {

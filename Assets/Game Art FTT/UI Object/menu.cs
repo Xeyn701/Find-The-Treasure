@@ -112,6 +112,17 @@ public class menu : MonoBehaviour
         questionpanel.SetActive(false);
         settingpanel.SetActive(false);
         soundpanel.SetActive(true);
+
+        if (PlayerPrefs.HasKey("bgmVol"))
+        {
+            bgmSlider.value = PlayerPrefs.GetFloat("bgmVol");
+        }
+
+        if (PlayerPrefs.HasKey("sfxVol"))
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("sfxVol");
+        }
+
     }
     public void supportButton()
     {

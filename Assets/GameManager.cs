@@ -11,8 +11,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
-    [SerializeField]
-    private TMP_Text coinText;
+    [SerializeField] private TMP_Text coinText;
+    private int temporaryCoinAmount = 0; 
+    private int savedCoinAmount = 0; 
 
     private int coinAmount;
 
@@ -27,20 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int SceneID;
 
-
-    /*
-    [SerializeField]
-    private GameObject health1;
-    [SerializeField]
-    private GameObject health2;
-    [SerializeField]
-    private GameObject health3;
-    */
-
-    // [SerializeField]
-    public List<GameObject> healthObj;
-
-    private void Awake()
+        private void Awake()
     {
         if (instance == null)
         {
@@ -49,27 +37,39 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-
-
         AudioPlayer.instance.PlayBGM(1);
-        CheckCoin();
+        LoadSavedCoins();
+        UpdateCoinText();
     }
 
     public void AddCoin(int amount)
     {
-        coinAmount += amount;
-        SaveCoin(coinAmount);
+        temporaryCoinAmount += amount;
         UpdateCoinText();
     }
-
-    private void UpdateCoinText()
+    public void SaveCoinsAtCheckpoint()
     {
-        coinText.text = "Jumlah Coin : " + coinAmount; ;
+        savedCoinAmount = temporaryCoinAmount;
     }
-
-    private void SaveCoin(int amount)
+    public void ResetTemporaryCoins()
     {
-        PlayerPrefs.SetInt("Money", amount);
+        temporaryCoinAmount = savedCoinAmount; 
+        UpdateCoinText();
+    }
+    public void UpdateCoinText()
+    {
+        coinText.text = "" + temporaryCoinAmount;
+    }
+    private void LoadSavedCoins()
+    {
+        if (PlayerPrefs.HasKey("SavedCoins"))
+        {
+            savedCoinAmount = PlayerPrefs.GetInt("SavedCoins");
+        }
+    }
+    private void SaveCoins()
+    {
+        PlayerPrefs.SetInt("SavedCoins", savedCoinAmount);
     }
 
     private void GetCoin()
@@ -94,40 +94,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetHealthObj(int health)
-    {
-        switch (health)
-        {
-            case 3:
-                print("Health = " + health);
-                healthObj[0].SetActive(true);
-                healthObj[1].SetActive(true);
-                healthObj[2].SetActive(true);
-                break;
-            case 2:
-                print("Health = " + health);
-                healthObj[0].SetActive(true);
-                healthObj[1].SetActive(true);
-                healthObj[2].SetActive(false);
-                break;
-            case 1:
-                print("Health = " + health);
-                healthObj[0].SetActive(true);
-                healthObj[1].SetActive(false);
-                healthObj[2].SetActive(false);
-                break;
-            case 0:
-                print("Player Die");
-                print("Health = " + health);
-                healthObj[0].SetActive(false);
-                healthObj[1].SetActive(false);
-                healthObj[2].SetActive(false);
-                break;
-            default:
-                print("Incorrect health level.");
-                break;
-        }
-    }
 
     public void SpawnFinish()
     {
@@ -137,8 +103,7 @@ public class GameManager : MonoBehaviour
         collectibles.ItemSet();
     }
 
-
-    public void CheckWinCondition()
+        public void CheckWinCondition()
     {
         if (PlayerPrefs.HasKey("WinCondition"))
         {
@@ -167,8 +132,7 @@ public class GameManager : MonoBehaviour
     private void GameWin()
     {
         AudioPlayer.instance.AudioValueSave();
-
+        SaveCoins(); 
         SceneManager.LoadScene("MainMenu");
     }
-
 }
