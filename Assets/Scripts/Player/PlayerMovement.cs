@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float horizontalInput;
 
+    public MoveBackground moveBackground;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -51,13 +53,36 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded())
         {
-            coyoteCounter = coyoteTime; 
-            jumpCounter = extraJumps; 
+            coyoteCounter = coyoteTime;
+            jumpCounter = extraJumps;
         }
         else
-            coyoteCounter -= Time.deltaTime; 
+            coyoteCounter -= Time.deltaTime;
 
         body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+        MoveBackground(); // Memanggil fungsi MoveBackground
+    }
+
+    private void MoveBackground()
+    {
+        // Menggerakkan latar belakang berdasarkan input horizontal
+        if (horizontalInput == 0 && isGrounded())
+        {
+            // Ganti dengan logika Anda untuk menggerakkan latar belakang di sini
+            // moveBackground.Move(0, false);
+        }
+
+        if (horizontalInput < 0)
+        {
+            // Ganti dengan logika Anda untuk menggerakkan latar belakang di sini
+            // moveBackground.Move(-1, true);
+        }
+
+        if (horizontalInput > 0)
+        {
+            // Ganti dengan logika Anda untuk menggerakkan latar belakang di sini
+            // moveBackground.Move(1, true);
+        }
     }
 
     private void Jump()
@@ -74,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
             else
             {
-                if (jumpCounter > 0) 
+                if (jumpCounter > 0)
                 {
                     body.velocity = new Vector2(body.velocity.x, jumpPower);
                     jumpCounter--;

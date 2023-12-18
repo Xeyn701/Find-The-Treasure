@@ -4,135 +4,101 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEditor.PackageManager.UI;
 
 public class GameManager : MonoBehaviour
 {
+        public static GameManager instance;
 
-    public static GameManager instance;
+        [SerializeField] private TMP_Text coinText;
+        private int temporaryCoinAmount = 0;
 
-    [SerializeField] private TMP_Text coinText;
-    private int temporaryCoinAmount = 0; 
-    private int savedCoinAmount = 0; 
+        [SerializeField] private GameObject finishObj;
+        private int totalCoinsInScene = 45;
 
-    private int coinAmount;
-
-    [SerializeField]
-    private GameObject finishObj;
-
-    [SerializeField]
-    private Transform finishPos;
-
-    public int SceneCoinAmount;
-
-    [SerializeField]
-    private int SceneID;
 
         private void Awake()
-    {
-        if (instance == null)
         {
-            instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
         }
-    }
-    private void Start()
-    {
-        AudioPlayer.instance.PlayBGM(1);
-        LoadSavedCoins();
-        UpdateCoinText();
-    }
 
-    public void AddCoin(int amount)
-    {
-        temporaryCoinAmount += amount;
-        UpdateCoinText();
-    }
-    public void SaveCoinsAtCheckpoint()
-    {
-        savedCoinAmount = temporaryCoinAmount;
-    }
-    public void ResetTemporaryCoins()
-    {
-        temporaryCoinAmount = savedCoinAmount; 
-        UpdateCoinText();
-    }
-    public void UpdateCoinText()
-    {
-        coinText.text = "" + temporaryCoinAmount;
-    }
-    private void LoadSavedCoins()
-    {
-        if (PlayerPrefs.HasKey("SavedCoins"))
+        private void Start()
         {
-            savedCoinAmount = PlayerPrefs.GetInt("SavedCoins");
+            AudioPlayer.instance.PlayBGM(1);
+            LoadSavedCoins();
+            UpdateCoinText();
+            CheckWinCondition();
         }
-    }
-    private void SaveCoins()
-    {
-        PlayerPrefs.SetInt("SavedCoins", savedCoinAmount);
-    }
 
-    private void GetCoin()
-    {
-
-        int amount = PlayerPrefs.GetInt("Money");
-        coinAmount = amount;
-
-        UpdateCoinText();
-    }
-
-    private void CheckCoin()
-    {
-
-        if (PlayerPrefs.HasKey("Money"))
+        public void AddCoin(int amount)
         {
-            GetCoin();
+            temporaryCoinAmount += amount;
+            UpdateCoinText();
+
+            if (temporaryCoinAmount >= totalCoinsInScene)
+            {
+                ActivateFinishObject();
+            }
         }
-        else
+
+        private void ActivateFinishObject()
         {
+            if (finishObj != null)
+            {
+                finishObj.SetActive(true);
+            }
+        }
+        public void SaveCoinsAtCheckpoint()
+        {
+            PlayerPrefs.SetInt("SavedCoins", temporaryCoinAmount);
+        }
+
+        public void ResetTemporaryCoins()
+        {
+            temporaryCoinAmount = PlayerPrefs.GetInt("SavedCoins", 0);
             UpdateCoinText();
         }
-    }
 
+        public void UpdateCoinText()
+        {
+            coinText.text = temporaryCoinAmount + "/" + totalCoinsInScene;
+        }
 
-    public void SpawnFinish()
-    {
-
-        GameObject obj = Instantiate(finishObj, finishPos.position, Quaternion.identity, finishPos);
-        Collectibles collectibles = obj.GetComponent<Collectibles>();
-        collectibles.ItemSet();
-    }
+        private void LoadSavedCoins()
+        {
+            temporaryCoinAmount = PlayerPrefs.GetInt("SavedCoins", 0);
+        }
 
         public void CheckWinCondition()
-    {
-        if (PlayerPrefs.HasKey("WinCondition"))
         {
-            int winCon = PlayerPrefs.GetInt("WinCondition");
-            int winAmt = winCon + 1;
-            PlayerPrefs.SetInt("WinCondition", winAmt);
-
-            Debug.Log("Current Win" + winAmt);
-
-            if (winAmt >= 3)
+            if (PlayerPrefs.HasKey("WinCondition"))
             {
-                GameWin();
+                int winCon = PlayerPrefs.GetInt("WinCondition");
+                int winAmt = winCon + 1;
+                PlayerPrefs.SetInt("WinCondition", winAmt);
+
+                Debug.Log("Current Win: " + winAmt);
+
+                if (winAmt >= 3)
+                {
+                    GameWin();
+                }
+
+                return;
             }
 
-            return;
+            if (!PlayerPrefs.HasKey("WinCondition"))
+            {
+                Debug.Log("Current Win: 1");
+                PlayerPrefs.SetInt("WinCondition", 1);
+            }
         }
 
-        if (!PlayerPrefs.HasKey("WinCondition"))
+        private void GameWin()
         {
-            Debug.Log("Current Win" + 1);
-            PlayerPrefs.SetInt("WinCondition", 1);
-            return;
+            PlayerPrefs.SetInt("SavedCoins", 0);
         }
-    }
-
-    private void GameWin()
-    {
-        AudioPlayer.instance.AudioValueSave();
-        SaveCoins(); 
-        SceneManager.LoadScene("MainMenu");
-    }
+    
 }

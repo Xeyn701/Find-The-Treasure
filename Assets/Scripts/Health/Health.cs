@@ -20,9 +20,6 @@ public class Health : MonoBehaviour
     [SerializeField] private Behaviour[] components;
     private bool invulnerable;
 
-    [Header("Death Sound")]
-    [SerializeField] private AudioClip deathSound;
-    [SerializeField] private AudioClip hurtSound;
 
     private void Awake()
     {
@@ -39,7 +36,7 @@ public class Health : MonoBehaviour
         {
             anim.SetTrigger("hurt");
             StartCoroutine(Invunerability());
-            SoundManager.instance.PlaySound(hurtSound);
+            AudioPlayer.instance.PlaySFX(2);       
         }
         else
         {
@@ -52,29 +49,24 @@ public class Health : MonoBehaviour
                 anim.SetTrigger("die");
 
                 dead = true;
-                SoundManager.instance.PlaySound(deathSound);
+                AudioPlayer.instance.PlaySFX(2);
             }
         }
 
-        // Set the health objects based on the current health
         SetHealthObjects(currentHealth);
     }
     public void AddHealth(float _value)
     {
         currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
-
-        // Set the health objects based on the current health
         SetHealthObjects(currentHealth);
     }
 
-    // Method to enable/disable health objects based on current health value
     private void SetHealthObjects(float healthValue)
     {
-        int health = Mathf.CeilToInt(healthValue); // Round up the health value
-        // Set the health objects (assuming healthObj is an array of GameObjects for representing health)
+        int health = Mathf.CeilToInt(healthValue); 
         for (int i = 0; i < healthObjects.Length; i++)
         {
-            healthObjects[i].SetActive(i < health); // Activate objects up to the current health value
+            healthObjects[i].SetActive(i < health); 
         }
     }
     private IEnumerator Invunerability()
@@ -96,7 +88,6 @@ public class Health : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Respawn
     public void Respawn()
     {
         AddHealth(startingHealth);
@@ -105,7 +96,6 @@ public class Health : MonoBehaviour
         StartCoroutine(Invunerability());
         dead = false;
 
-        //Activate all attached component classes
         foreach (Behaviour component in components)
             component.enabled = true;
     }

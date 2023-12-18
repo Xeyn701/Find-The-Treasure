@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 339728066529960372}
   - component: {fileID: 339728066529960375}
   - component: {fileID: 339728066529960373}
-  - component: {fileID: 6126100315396194484}
+  - component: {fileID: 6114465358304655854}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -182,7 +182,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
-  jumpSound: {fileID: 8300000, guid: 3c23de8f88fc9ba498b0d232fb269dff, type: 3}
+  moveBackground: {fileID: 0}
 --- !u!114 &339728066529960372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +201,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   damageAmount: 1
-  meleeAttackSound: {fileID: 8300000, guid: 347426481a60b394bb52cbf96d7607fe, type: 3}
 --- !u!95 &339728066529960375
 Animator:
   serializedVersion: 5
@@ -236,15 +235,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 3
+  healthObjects: []
   iFramesDuration: 1.5
   numberOfFlashes: 3
   components:
   - {fileID: 339728066529960372}
   - {fileID: 339728066529960374}
   - {fileID: 339728066529960373}
-  deathSound: {fileID: 8300000, guid: dd6d9531e2f11434f9add7e7e09cd332, type: 3}
-  hurtSound: {fileID: 8300000, guid: 32ff513695816ae4fb9ecd5c1bc67120, type: 3}
---- !u!114 &6126100315396194484
+--- !u!114 &6114465358304655854
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -256,4 +254,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f41e2c69cdc2a94aa86d60368350fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoint: {fileID: 8300000, guid: ac2ef9f49e9913d47a234631fc894d68, type: 3}
+  checkpoint: {fileID: 0}

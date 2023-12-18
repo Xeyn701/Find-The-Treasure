@@ -104,7 +104,7 @@ public class UIManager : MonoBehaviour
 
     public void PlayButtonSound()
     {
-        AudioPlayer.instance.PlaySFX(3);
+        AudioPlayer.instance.PlaySFX(1);
     }
     #region Game Over
     public void GameOver()

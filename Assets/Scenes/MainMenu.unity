@@ -1983,6 +1983,16 @@ MonoBehaviour:
   sfxClip:
   - {fileID: 8300000, guid: ab8e953296c5bc140be763cfb7c429b9, type: 3}
   - {fileID: 8300000, guid: 5cf7577b84d1c654a861be0f30551a0e, type: 3}
+  - {fileID: 8300000, guid: 5b5f0b99354290342ad93d1b47a71628, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   bgmClip:
@@ -6590,7 +6600,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -6790,7 +6800,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 1953102147}
+  m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

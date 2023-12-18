@@ -51,8 +51,17 @@ public class AudioPlayer : MonoBehaviour
         }
         bgmAudioSource.clip = bgmClip[index];
         bgmAudioSource.Play();
+        StartCoroutine(RestartBGMWhenFinished()); 
     }
 
+    private IEnumerator RestartBGMWhenFinished()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(bgmAudioSource.clip.length); 
+            bgmAudioSource.Play(); 
+        }
+    }
 
     public void PlaySFX(int index)
     {

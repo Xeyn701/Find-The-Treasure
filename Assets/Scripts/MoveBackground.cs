@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBackground : MonoBehaviour {
+public class MoveBackground : MonoBehaviour
+{
 
 
 
-	public float speed;
-	private float x;
-	public float PontoDeDestino;
-	public float PontoOriginal;
+    public float speed;
+    private float x;
+    public float PontoDeDestino;
+    public float PontoOriginal;
 
     private bool isMoving;
     private int direction;
@@ -23,12 +24,14 @@ public class MoveBackground : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-		//PontoOriginal = transform.position.x;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        //PontoOriginal = transform.position.x;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         if (!isMoving)
         {
@@ -51,8 +54,8 @@ public class MoveBackground : MonoBehaviour {
 
     }
 
-	public void Move(int dir, bool move)
-	{
+    public void Move(int dir, bool move)
+    {
         direction = dir;
         isMoving = move;
     }
